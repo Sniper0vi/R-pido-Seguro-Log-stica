@@ -12,16 +12,16 @@
 ```
 Exemplo:
 {
-    "nomeCliente": "Nicolas",
-    "cpfCliente": "98727348370",
-    "telefoneCliente": "19998627390",
-    "emailCliente": "nicolas@gmail.com",
+    "nomeCliente": "Vinicius",
+    "cpfCliente": "12345678901",
+    "telefoneCliente": "191234567",
+    "emailCliente": "vinicius@gmail.com",
     "logradouroCliente": "Rua dos sapos",
     "numeroCliente": "341",
-    "bairroCliente": "Melancias", 
-    "cidadeCliente": "Mato verde",
-    "estadoCliente": "Minas Gerais",
-    "cepCliente": "173172"
+    "bairroCliente": "Matao", 
+    "cidadeCliente": "Sumare",
+    "estadoCliente": "Sao paulo",
+    "cepCliente": "123456"
 }
 ```
 - **Response**:
@@ -36,17 +36,17 @@ Exemplo:
 - **Body**:
 ```
 Exemplo:
-{
-    "nomeCliente": "Nikolas",
-    "cpfCliente": "28727348370",
-    "telefoneCliente": "29998627390",
-    "emailCliente": "nikolas@outlook.com",
-    "logradouroCliente": "Rua das rãs",
-    "numeroCliente": "273",
-    "bairroCliente": "Macaxeiras", 
-    "cidadeCliente": "Mato marrom",
-    "estadoCliente": "Minas Únicas",
-    "cepCliente": "423172"
+ {
+    "nomeCliente": "Julia",
+    "cpfCliente": "09876543210",
+    "telefoneCliente": "197654321",
+    "emailCliente": "julia@gmail.com",
+    "logradouroCliente": "Rua Campos",
+    "numeroCliente": "754",
+    "bairroCliente": "Borogodo", 
+    "cidadeCliente": "Lagarto",
+    "estadoCliente": "Goias",
+    "cepCliente": "173172"
 }
 ```
 - **Response**:
@@ -79,13 +79,12 @@ Exemplo:
 Exemplo:
 {
     "idCliente": "DE2D1E90-0091-4203-8D13-9BEB51A90A4C",
-    "dataPedido": "2025/11/18",
+    "dataPedido": "2025/10/03",
     "tipoEntrega": "URGENTE",
-    "distanciaPedido": "100",
-    "cargaPedido": "10",
-    "valorKM": "20",
+    "distanciaPedido": "500",
+    "cargaPedido": "1",
+    "valorKM": "5",
     "valorKG": "10"
-
 }
 ```
 - **Response**:
@@ -105,9 +104,9 @@ Exemplo:
 
     "dataPedido": "2025/11/18",
     "tipoEntrega": "URGENTE",
-    "distanciaPedido": "100",
-    "cargaPedido": "10",
-    "valorKM": "20",
+    "distanciaPedido": "500",
+    "cargaPedido": "1",
+    "valorKM": "5",
     "valorKG": "10"
 
 }
