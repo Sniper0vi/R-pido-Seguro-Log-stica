@@ -50,7 +50,7 @@ const pedidoModel = {
         const pool = await getConnection();
 
         const transaction = new sql.Transaction(pool);
-        await transaction.begin(); // Inicia a transação
+        await transaction.begin(); 
 
         try {
             let querySQL = `
@@ -70,8 +70,8 @@ const pedidoModel = {
 
             await transaction.commit();
 
-        } catch (error) { //Se alguma dessas operações der erro, dará um rollback
-            await transaction.rollback() // Desfaz tudo caso dê erro
+        } catch (error) { 
+            await transaction.rollback() 
             console.error("Erro ao inserir pedido:", error)
             throw error;
         }
@@ -79,7 +79,7 @@ const pedidoModel = {
 
     atualizarPedido: async (idPedido, idCliente, dataPedido, tipoEntrega, distanciaPedido, cargaPedido, valorKM, valorKG) => {
         try {
-            const pool = await getConnection(); // Cria conexão com o Banco de Dados
+            const pool = await getConnection();
 
             const querySQL = `
                 UPDATE Pedidos
@@ -105,7 +105,7 @@ const pedidoModel = {
 
         } catch (error) {
             console.error('Erro ao atualizar pedido: ', error);
-            throw error; // Passa o erro para o controler tratar
+            throw error; 
         }
     }
 };
