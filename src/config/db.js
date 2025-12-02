@@ -1,19 +1,17 @@
 const sql = require("mssql");
 
-// Criar constante de configurações
-const config = { // Database hospedado em somee.com
+
+const config = {
     user: process.env.USER_DB,
     password: process.env.PASSWORD_DB,
     server: process.env.SERVER_DB,
-    database: 'Protagonistas',
-    // Opções de conexões abaixo que devem ser dentro de chaves
+    database: 'RSLogistica',
     options: {
         encrypt: true,
         trustServerCertificate: true
     }
 }
-
-async function getConnection() {// Função assíncrona - Que acontece simultâneamente
+async function getConnection() {
     try {
 
         const pool = await sql.connect(config);
