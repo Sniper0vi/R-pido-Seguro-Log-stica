@@ -45,7 +45,7 @@ const clienteController = {
             "emailCliente": "exemplo@exemplo.com"
             "logradouroCliente": "exemplo"
             "numeroCliente": 123
-            "bairroCliente": "Melancias"
+            "bairroCliente": "Matao"
             "cidadeCliente": "Sumaré"
             "estadoCliente": "SP"
             "cepCliente" 123
@@ -93,15 +93,15 @@ const clienteController = {
     /*
     {
         "idCliente": "19F2FD7B-E803-4643-8010-5F970DFD7544",
-        "nomeCliente": "José",
-        "cpfCliente": "73924838774",
+        "nomeCliente": "Joseph",
+        "cpfCliente": "12345678901",
         "telefoneCliente": "1962836792",
-        "emailCliente": "jouse@gmail.com",
+        "emailCliente": "jouseph@gmail.com",
         "logradouroCliente": "Rua dos sapos",
-        "numeroCliente": "341",
-        "bairroCliente": "Melancias",
-        "cidadeCliente": "Mato verde",
-        "estadoCliente": "Minas Gerais",
+        "numeroCliente": "453",
+        "bairroCliente": "Ginbabas",
+        "cidadeCliente": "Ginbalinha",
+        "estadoCliente": "Amapa",
         "cepCliente": "17317-123"
     }
         */
