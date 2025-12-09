@@ -1,5 +1,5 @@
 require("dotenv").config();
-const express = require('express');
+const express = require('express'); 
 const app = express(); 
 
 
@@ -8,6 +8,7 @@ const {pedidoRoutes} = require('./src/routes/pedidoRoutes');
 const {entregaRoutes} = require('./src/routes/entregaRoutes');
 
 const PORT = 8081;
+
 app.use(express.json());
 
 app.use('/', clienteRoutes)

@@ -29,7 +29,7 @@ const pedidoModel = {
 
     buscarUm: async (idPedido) => {
         try {
-            const pool = await getConnection(); // Cria conexão com o Banco de Dados
+            const pool = await getConnection(); 
 
             const querySQL = 'SELECT * FROM Pedidos WHERE idPedido = @idPedido';
 
@@ -41,12 +41,11 @@ const pedidoModel = {
 
         } catch (error) {
             console.error('Erro ao buscar o pedido: ', error);
-            throw error; // Passa o erro para o controler tratar
+            throw error; 
         }
     },
 
-
-    inserirPedido: async (idCliente, dataPedido, tipoEntrega, distanciaPedido, cargaPedido, valorKM, valorKG) => {
+    inserirPedido: async (idCliente, valorDistancia, tipoEntrega, valorBase, valorPeso, valorFinal, dataPedido, distanciaPedido, cargaPedido, valorKM, valorKG, acrescimoEntrega, descontoEntrega, taxaEntrega, statusEntrega) => {
         const pool = await getConnection();
 
         const transaction = new sql.Transaction(pool);
@@ -55,10 +54,11 @@ const pedidoModel = {
         try {
             let querySQL = `
                 INSERT INTO Pedidos (idCliente, dataPedido, tipoEntrega, distanciaPedido, cargaPedido, valorKM, valorKG)
+                OUTPUT INSERTED.idPedido
                 VALUES (@idCliente, @dataPedido, @tipoEntrega, @distanciaPedido, @cargaPedido, @valorKM, @valorKG)
-            `
+                `
 
-            await transaction.request()
+            const result = await transaction.request()
                 .input("idCliente", sql.UniqueIdentifier, idCliente)
                 .input("dataPedido", sql.Date, dataPedido)
                 .input("tipoEntrega", sql.VARCHAR(7), tipoEntrega)
@@ -68,7 +68,29 @@ const pedidoModel = {
                 .input("valorKG", sql.DECIMAL(10, 2), valorKG)
                 .query(querySQL);
 
+           
+
+            const pedido =  result.recordset[0].idPedido; 
+
+            
+            querySQL = `
+                INSERT INTO Entregas(idPedido, valorDistancia, valorPeso, acrescimoEntrega, descontoEntrega, taxaEntrega, valorFinal, statusEntrega)
+                VALUES(@idPedido, @valorDistancia, @valorPeso, @acrescimoEntrega, @descontoEntrega, @taxaEntrega, @valorFinal, @statusEntrega)
+            `;
+
+            await transaction.request()
+                .input('idPedido', sql.UniqueIdentifier, pedido)
+                .input('valorDistancia', sql.Decimal(10, 2), valorDistancia)
+                .input('valorPeso', sql.Decimal(10, 2), valorPeso)
+                .input('acrescimoEntrega', sql.Decimal(10, 2), acrescimoEntrega)
+                .input('descontoEntrega', sql.Decimal(10, 2), descontoEntrega)
+                .input('taxaEntrega', sql.Decimal(10, 2), taxaEntrega)
+                .input('valorFinal', sql.Decimal(10, 2), valorFinal)
+                .input('statusEntrega', sql.VarChar(15), statusEntrega)
+                .query(querySQL);
+         
             await transaction.commit();
+            
 
         } catch (error) { 
             await transaction.rollback() 
@@ -79,7 +101,10 @@ const pedidoModel = {
 
     atualizarPedido: async (idPedido, idCliente, dataPedido, tipoEntrega, distanciaPedido, cargaPedido, valorKM, valorKG) => {
         try {
-            const pool = await getConnection();
+            const pool = await getConnection(); 
+
+            const transaction = new sql.Transaction(pool);
+            await transaction.begin();
 
             const querySQL = `
                 UPDATE Pedidos
@@ -92,7 +117,7 @@ const pedidoModel = {
                     valorKG = @valorKG
                 WHERE idPedido = @idPedido
             `
-            await pool.request()
+            await transaction.request()
                 .input('idPedido', sql.UniqueIdentifier, idPedido)
                 .input('idCliente', sql.UniqueIdentifier, idCliente)
                 .input("dataPedido", sql.Date, dataPedido)
@@ -102,8 +127,10 @@ const pedidoModel = {
                 .input("valorKM", sql.DECIMAL(10, 2), valorKM)
                 .input("valorKG", sql.DECIMAL(10, 2), valorKG)
                 .query(querySQL);
+            await transaction.commit();
 
         } catch (error) {
+            await transaction.rollback()
             console.error('Erro ao atualizar pedido: ', error);
             throw error; 
         }

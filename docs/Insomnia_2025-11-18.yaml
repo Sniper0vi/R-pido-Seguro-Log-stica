@@ -32,7 +32,7 @@ collection:
                         "cpfCliente": "12345678901",
                         "telefoneCliente": "191234567",
                         "emailCliente": "vinicius@gmail.com",
-                        "logradouroCliente": "Rua Lemos",
+                        "logradouroCliente": "Rua do Mh",
                         "numeroCliente": "258",
                         "bairroCliente": "Matao", 
                         "cidadeCliente": "Sumare",
@@ -102,7 +102,7 @@ collection:
                         "bairroCliente": "Borogodo", 
                         "cidadeCliente": "Lagarto",
                         "estadoCliente": "Goias",
-                        "cepCliente": "173172"
+                        "cepCliente": "0987654"
                     }
         headers:
           - name: Content-Type
@@ -216,11 +216,11 @@ collection:
           mimeType: application/json
           text: |-
             {
-            "dataPedido": "2025/11/15",
-            "tipoEntrega": "NORMAL",
-            "distanciaPedido": "100",
-            "cargaPedido": "10",
-            "valorKM": "10",
+            "dataPedido": "2025/11/18",
+            "tipoEntrega": "URGENTE",
+            "distanciaPedido": "500",
+            "cargaPedido": "1",
+            "valorKM": "5",
             "valorKG": "10"
             }
         headers:

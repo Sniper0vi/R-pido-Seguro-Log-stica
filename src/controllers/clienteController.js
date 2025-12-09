@@ -3,6 +3,13 @@ const { sql, getConnection } = require("../config/db");
 const { rows } = require("mssql");
 
 const clienteController = {
+    // ---------------------
+    // LISTAR TODOS OS CLIENTES
+    // GET /clientes
+    // ---------------------
+    // LISTAR UM OS CLIENTE
+    // GET /clientes/:idCliente
+    // ---------------------
 
     listarClientes: async (req, res) => {
         try {
@@ -20,7 +27,7 @@ const clienteController = {
 
             const clientes = await clienteModel.buscarTodos();
             res.status(200).json(clientes);
-
+        
         } catch (error) {
             console.error('Erro ao listar clientes:', error);
             res.status(500).json({ message: 'Erro ao buscar clientes.' });
@@ -34,30 +41,39 @@ const clienteController = {
         {
             "nomeCliente": "valor",
             "cpfCliente": "12345678910"
-            "telefoneCliente":
-            "emailCliente": 
-            "logradouroCliente":
-            "numeroCliente":
-            "bairroCliente":
-            "cidadeCliente":
-            "estadoCliente":
-            "cepCliente"
+            "telefoneCliente": "19999999999"
+            "emailCliente": "exemplo@exemplo.com"
+            "logradouroCliente": "exemplo"
+            "numeroCliente": 123
+            "bairroCliente": "Melancias"
+            "cidadeCliente": "Sumaré"
+            "estadoCliente": "SP"
+            "cepCliente" 123
         }
     */
     // ---------------------  
     criarCliente: async (req, res) => {
         try {
-  
+           
             const { nomeCliente, cpfCliente, telefoneCliente, emailCliente, logradouroCliente, numeroCliente, bairroCliente, cidadeCliente, estadoCliente, cepCliente } = req.body;
 
-            
             if (nomeCliente == undefined || cpfCliente == undefined || telefoneCliente == undefined || emailCliente == undefined || logradouroCliente == undefined || numeroCliente == undefined || bairroCliente == undefined || cidadeCliente == undefined || estadoCliente == undefined || cepCliente == undefined) {
                 return res.status(400).json({ erro: 'Campos obrigatórios não preenchidos!' });
             }
 
-            const result = await clienteModel.buscarCPF(cpfCliente);
+            let result = await clienteModel.buscarCPF(cpfCliente);
             if (result.length > 0) {
                 return res.status(409).json({ message: 'CPF já cadastrado.' });
+            }
+
+            result = await clienteModel.buscarTelefone(telefoneCliente);
+            if (result.length > 0) {
+                return res.status(409).json({ message: 'Telefone já cadastrado.' });
+            }
+
+            result = await clienteModel.buscarEmail(emailCliente)
+            if (result.length > 0) {
+                return res.status(409).json({ message: 'Email já cadastrado.' });
             }
 
             await clienteModel.inserirCliente(nomeCliente, cpfCliente, telefoneCliente, emailCliente, logradouroCliente, numeroCliente, bairroCliente, cidadeCliente, estadoCliente, cepCliente);
@@ -69,10 +85,31 @@ const clienteController = {
             res.status(500).json({ message: 'Erro no servidor ao cadastrar cliente.' });
         }
     },
+
+    // ---------------------
+    // ATUALIZAR UM CLIENTE EXISTENTE
+    // PUT /clientes
+    // ---------------------
+    /*
+    {
+        "idCliente": "19F2FD7B-E803-4643-8010-5F970DFD7544",
+        "nomeCliente": "José",
+        "cpfCliente": "73924838774",
+        "telefoneCliente": "1962836792",
+        "emailCliente": "jouse@gmail.com",
+        "logradouroCliente": "Rua dos sapos",
+        "numeroCliente": "341",
+        "bairroCliente": "Melancias",
+        "cidadeCliente": "Mato verde",
+        "estadoCliente": "Minas Gerais",
+        "cepCliente": "17317-123"
+    }
+        */
+    // ---------------------  
+
     atualizarCliente: async (req, res) => {
         try {
-            const { idCliente } = req.params;
-            const { nomeCliente, cpfCliente, telefoneCliente, emailCliente, logradouroCliente, numeroCliente, bairroCliente, cidadeCliente, estadoCliente, cepCliente } = req.body;
+            const { idCliente, nomeCliente, cpfCliente, telefoneCliente, emailCliente, logradouroCliente, numeroCliente, bairroCliente, cidadeCliente, estadoCliente, cepCliente } = req.body;
 
             if (idCliente.length != 36) {
                 return res.status(400).json({ erro: 'id do cliente inválido' });
@@ -80,6 +117,21 @@ const clienteController = {
             const cliente = await clienteModel.buscarUm(idCliente);
             if (!cliente || cliente.length !== 1) { 
                 return res.status(404).json({ erro: 'Cliente não encontrado!' })
+            }
+
+            let result = await clienteModel.buscarCPF(cpfCliente);
+            if (result.length > 0) {
+                return res.status(409).json({ message: 'CPF já cadastrado.' });
+            }
+
+            result = await clienteModel.buscarTelefone(telefoneCliente);
+            if (result.length > 0) {
+                return res.status(409).json({ message: 'Telefone já cadastrado.' });
+            }
+
+            result = await clienteModel.buscarEmail(emailCliente)
+            if (result.length > 0) {
+                return res.status(409).json({ message: 'Email já cadastrado.' });
             }
 
             const clienteAtual = cliente[0]
@@ -104,6 +156,12 @@ const clienteController = {
             res.status(500).json({ erro: 'Erro no servidor ao atualizar cliente' });
         }
     },
+
+    // ---------------------
+    // DELETAR UM CLIENTE EXISTENTE
+    // DELETE/clientes/:@idCliente
+    // ---------------------  
+
     deletarCliente: async (req, res) => {
         try {
             const { idCliente } = req.params;
@@ -116,6 +174,11 @@ const clienteController = {
 
             if (!cliente || cliente.length !== 1) {
                 return res.status(404).json({ erro: 'cliente não encontrado!' });
+            }
+
+            result = await clienteModel.buscarPedidosPorCliente(idCliente)
+            if (result.length > 0) {
+                return res.status(409).json({ message: 'Esse cliente está vinculado à um pedido. Não é possivel deletar.' });
             }
 
             await clienteModel.deletarCliente(idCliente);
