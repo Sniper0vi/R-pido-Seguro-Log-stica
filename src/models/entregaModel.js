@@ -38,14 +38,15 @@ const entregaModel = {
     inserirEntrega: async (idPedido, valorDistancia, valorPeso, acrescimoEntrega, descontoEntrega, taxaEntrega, valorFinal, statusEntrega) => {
         try {
             const pool = await getConnection();
-
+            const transaction = new sql.Transaction(pool);
+            await transaction.begin();
 
             const querySQL = `
                 INSERT INTO Entregas(idPedido, valorDistancia, valorPeso, acrescimoEntrega, descontoEntrega, taxaEntrega, valorFinal, statusEntrega)
                 VALUES(@idPedido, @valorDistancia, @valorPeso, @acrescimoEntrega, @descontoEntrega, @taxaEntrega, @valorFinal, @statusEntrega)
             `;
 
-            await pool.request()
+            await transaction.request()
                 .input('idPedido', sql.UniqueIdentifier, idPedido)
                 .input('valorDistancia', sql.Decimal(10, 2), valorDistancia)
                 .input('valorPeso', sql.Decimal(10, 2), valorPeso)
@@ -56,9 +57,10 @@ const entregaModel = {
                 .input('statusEntrega', sql.VarChar(15), statusEntrega)
                 .query(querySQL);
 
+            await transaction.commit();
 
         } catch (error) {
-
+            await transaction.rollback();
             console.error('Erro ao inserir entrega: ', error);
             throw error;
         }
